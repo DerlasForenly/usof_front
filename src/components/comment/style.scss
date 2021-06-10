@@ -1,0 +1,40 @@
+.comments-field {
+    margin: 5px;
+    background: rgb(120, 255, 120);
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    background: rgb(207, 255, 135);
+
+    .author-info {
+        margin-left: 5px;
+        margin-right: 5px;
+
+        #author, #date, #direction {
+            margin-right: 5px;
+        }
+
+        #author {
+            font-size: 18px;
+        }
+
+        #direction, #date {
+            font-size: 15px;
+            color: rgb(17, 46, 17);
+        }
+    }
+
+    #content {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+textarea {
+    height: 40px;
+    margin: 5px;
+    width: 575px;
+}
