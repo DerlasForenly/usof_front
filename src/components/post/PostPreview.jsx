@@ -1,5 +1,3 @@
-import "./style.scss"
-
 export default function PostPreview(props) {
 	return (
 		<div className="post-in-list">

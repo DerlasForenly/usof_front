@@ -1,6 +1,4 @@
-import Comment from "../comment/comment"
-
-import "./style.scss"
+import Comment from "./Comment"
 
 export default function CommentsField(props) {
 	return (

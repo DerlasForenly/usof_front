@@ -1,7 +1,5 @@
-import PostPreview from "../post/post_preview"
-import CurrentPost from "../post/current_post"
-
-import "./style.scss"
+import PostPreview from "../post/PostPreview"
+import CurrentPost from "../post/CurrentPost"
 
 export default function MainPage(props) {
 	return (
