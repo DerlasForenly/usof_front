@@ -27,6 +27,9 @@ export default function App() {
 				<Route path="/">
 					<MainPage></MainPage>
 				</Route>
+				<Route path="/profile">
+					<MainPage></MainPage>
+				</Route>
 		  </Switch>
 
 		</div>
