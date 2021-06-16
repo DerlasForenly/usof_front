@@ -9,8 +9,11 @@ import acceptImg from "../../images/accept.png"
 export default class Comment extends React.Component {
 	constructor(props) {
     super(props)
-		this.MainPageRef = React.createRef()
+		this.data = {
+			content: this.props.comment.content
+		}
 		this.state = {
+			content: this.props.comment.content,
 			isLoading: true,
 			isEditing: false,
 		}
@@ -21,8 +24,28 @@ export default class Comment extends React.Component {
 			this.setState({isEditing: false})
 		}
 		else {
-			this.setState({isEditing: true})
+			axios({
+				method: 'patch',
+				url: "http://127.0.0.1:8000/api/comments/" + this.props.comment.id,
+				data: {
+					content: this.data.content
+				},
+				headers: {
+					Authorization: `Bearer` + Cookie.get('token')
+				}
+			})
+			.then((response) => {
+				console.log(response.data)
+				this.setState({content: response.data.content, isEditing: true})
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
 		}
+	}
+
+	onTextarea = e => {
+		this.data.content = e.target.value
 	}
 
 	onDelete = e => {
@@ -49,13 +72,11 @@ export default class Comment extends React.Component {
 			this.setState({isEditing: true})
 		}
 
-		console.log('Sending')
-
 		axios({
 			method: 'patch',
 			url: "http://127.0.0.1:8000/api/comments/" + this.props.comment.id,
 			data: {
-				content: "new content"
+				content: this.data.content
 			},
 			headers: {
 				Authorization: `Bearer` + Cookie.get('token')
@@ -63,14 +84,12 @@ export default class Comment extends React.Component {
 		})
 		.then((response) => {
 			console.log(response.data)
+			this.setState({content: response.data.content})
 		})
 		.catch(function (error) {
 			console.log(error)
 		})
 	}
-
-	
-
 
 	render() {
 		return (
@@ -105,8 +124,11 @@ export default class Comment extends React.Component {
 				</div>
 				{
 					this.state.isEditing ? 
-						<textarea className="edit-area" defaultValue={this.props.comment?.content}></textarea> :
-						<label className="content">{this.props.comment?.content}</label>
+						<textarea 
+							className="edit-area" 
+							defaultValue={this.state.content}
+							onChange={this.onTextarea}></textarea> :
+						<label className="content">{this.state.content}</label>
 				}
 				<CommentLikesController comment={this.props.comment}></CommentLikesController>
 			</div>
