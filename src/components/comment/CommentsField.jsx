@@ -1,43 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import Comment from "./Comment"
 
-export default class CommentsField extends React.Component {
-	constructor(props) {
-    super(props)
-		this.state = {
-			comments: [],
-			isLoading: true
-		}
-  }
+export default function CommentsField(props) {
+	const [ comments, setComments ] = useState([])
+	const [ isLoading, setIsLoading ] = useState(true)
 
-	componentDidMount() {
-    axios({
+	useEffect(() => {
+		axios({
 			method: 'get',
-			url: "http://127.0.0.1:8000/api/posts/" + this.props.post + "/comments",
+			url: "http://127.0.0.1:8000/api/posts/" + props.post + "/comments",
 			headers: {
-				Authorization: `Bearer` + Cookies.get('token')
+				Authorization: `Bearer` + Cookie.get('token')
 			}
 		})
 		.then((response) => {
-			this.setState({comments: response.data, isLoading: false})
+			setComments(response.data)
+			setIsLoading(false)
 		})
 		.catch(function (error) {
 			console.log(error)
 		})
-  }
+	}, [ props.post, props.reload ])
 
-	render() {
-    return (
-			<div className="comments-field">{
-				this.state.isLoading ? <p>loading</p> : (
-					this.state.comments.map((e, index) => {
+	return (
+		<div className="comments-field">
+			{
+				isLoading ? <p>loading</p> : (
+					comments.map((e, index) => {
 						return <Comment comment={e} key={e.id}></Comment>
 					})
 				)
-			}</div>
-    )
-  }
-
-} 
+			}
+		</div>
+	)
+}

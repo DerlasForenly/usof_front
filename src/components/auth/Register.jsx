@@ -79,7 +79,7 @@ export default function Register(props) {
         placeholder="confirm password" 
         onChange={onChangeConfirmPassword}
       ></input> */}
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
     </form>
   )
 }
