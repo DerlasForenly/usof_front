@@ -58,6 +58,7 @@ export default class Comment extends React.Component {
 		})
 		.then((response) => {
 			console.log(response.data)
+			this.props.setComments(comments => comments.filter(comment => comment.id !== this.props.comment.id))
 		})
 		.catch(function (error) {
 			console.log(error)

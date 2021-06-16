@@ -17,29 +17,27 @@ export default function CurrentPost(props) {
 
 	const onTextarea = e => {
 		data.content = e.target.value
-		console.log(data.content)
 	}
 
 	const onSubmit = e => {
 		e.preventDefault()
   
-    axios({
-      method: 'post',
-      url: "http://127.0.0.1:8000/api/posts/" + props.post.id + "/comments",
-      data,
-      headers: {
-				authorization: `Bearer ` + Cookie.get('token')
-			}
-    })
-    .then((response) => {
-      console.log(response)
-			setState({reload: !state.reload})
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
+		axios({
+		method: 'post',
+		url: "http://127.0.0.1:8000/api/posts/" + props.post.id + "/comments",
+		data,
+		headers: {
+					authorization: `Bearer ` + Cookie.get('token')
+				}
+		})
+		.then((response) => {
+		console.log(response)
+				setState({reload: !state.reload})
+		})
+		.catch(function (error) {
+		console.log(error)
+		})
 	}
-
 
 	return (
 		<div className="post">
@@ -61,10 +59,15 @@ export default function CurrentPost(props) {
 					<button>-</button>
 			</div>
 			<CommentsField post={props.post.id} reload={state.reload}></CommentsField>
-			<form onSubmit={onSubmit} className="create-comment-field">
-				<textarea onChange={onTextarea} defaultValue=""></textarea>
-				<button type="submit"></button>
-			</form>
+			{
+				Cookie.get('token') ?
+				<form onSubmit={onSubmit} className="create-comment-field">
+					<textarea onChange={onTextarea} defaultValue=""></textarea>
+					<button type="submit"></button>
+				</form> :
+				<form></form>
+			}
+			
 		</div>
 	)
 	

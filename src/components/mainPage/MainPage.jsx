@@ -4,8 +4,7 @@ import CurrentPost from "../post/CurrentPost"
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import PostListPagination from "../post/PostListPagination"
-//import Categories from "../post/Categories"
-
+import createImg from "../../images/create.png"
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -14,7 +13,8 @@ export default class MainPage extends React.Component {
 			posts: [],
 			isLoading: true,
 			somePostActive: false,
-			currentPost: 1
+			currentPost: 1,
+			isCreating: false
 		}
   }
 
@@ -41,6 +41,13 @@ export default class MainPage extends React.Component {
 		this.setState({currentPost: parseInt(e.currentTarget.id)})
 	}
 
+	onCreatePost = e => {
+		console.log('create post')
+		this.setState({
+			isCreating: true
+		})
+	}
+
 
   render() {
     return (
@@ -48,6 +55,9 @@ export default class MainPage extends React.Component {
 				this.state.isLoading ? <p>LOADING....</p> : (
 					<>
 						<div className="posts-list">
+							<div className="create-post-div" onClick={this.onCreatePost}>
+								<img src={createImg} className="logo" alt="logo"></img>
+							</div>
 							{
 								this.state.posts.map((post) => {
 									return (
@@ -63,7 +73,10 @@ export default class MainPage extends React.Component {
 							<PostListPagination></PostListPagination>
 						</div>
 						<div className="current-post">
+							{
+								this.state.isCreating ? <div></div> :
 								<CurrentPost post={this.state.posts[this.state.currentPost - 1]}></CurrentPost>
+							}
 						</div>
 					</>
 				)

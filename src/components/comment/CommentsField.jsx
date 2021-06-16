@@ -29,7 +29,7 @@ export default function CommentsField(props) {
 			{
 				isLoading ? <p>loading</p> : (
 					comments.map((e, index) => {
-						return <Comment comment={e} key={e.id}></Comment>
+						return <Comment comment={e} key={e.id} setComments={setComments}></Comment>
 					})
 				)
 			}

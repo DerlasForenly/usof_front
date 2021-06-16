@@ -1,13 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import Cookie from 'js-cookie'
-// import {
-//   BrowserRouter as Router,
-//   Link,
-// } from "react-router-dom"
 
-
-// import loginImg from "../../images/auth.svg"
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route
+} from "react-router-dom"
 
 export default function Login(props) {
   let autorized = false
@@ -38,7 +37,9 @@ export default function Login(props) {
     })
     .then((response) => {
         console.log(response.data)
-        Cookie.set('token', response.data.access_token)
+        Cookie.set('token', response.data.access_token, {
+          expires: 7
+        })
         autorized = true
         console.log(autorized)
     })

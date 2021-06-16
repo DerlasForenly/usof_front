@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import logoImg from "../../images/a.png"
 import searchImg from "../../images/search.png"
+import Cookie from 'js-cookie'
 
 export default function Header() {
 	return (
@@ -14,8 +15,15 @@ export default function Header() {
 				<img src={searchImg} alt="search"></img>
 			</div>
 			<label id="home"><Link to="/">Home</Link></label>
-			<label id="login"><Link to="/login">Login</Link></label>
+			{
+				Cookie.get('token') ? 
+				<label id="profile"><Link to="/profile">Profile</Link></label> :
+				<label id="login"><Link to="/login">Login</Link></label>
+			}
 			<label id="register"><Link to="/register">Register</Link></label>
+			{/* <div id="create-post">
+				<label>lol</label>
+			</div> */}
 		</div>
 	)
 }

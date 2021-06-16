@@ -1,11 +1,12 @@
 import React from 'react'
+import Categories from './Categories'
 
 export default function PostInfo(props) {
 	return (
 		<div className="post-info">
-			<label>Author</label>
-			<label>Date</label>
-			<label>Status</label>
+			<label>{props.post.login}</label>
+			<label>{props.post.created_at + ""}</label>
+			<label>{props.post.status}</label>
 		</div>
 	)
 }
