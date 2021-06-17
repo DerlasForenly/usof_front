@@ -3,7 +3,7 @@ import logoImg from "../../images/a.png"
 import searchImg from "../../images/search.png"
 import Cookie from 'js-cookie'
 
-export default function Header() {
+export default function Header(props) {
 	return (
 		<div className="navigation-header">
 			<div className="logo-div">
@@ -12,18 +12,21 @@ export default function Header() {
 			</div>
 			<div className="search">
 				<input type="text"></input>
-				<img src={searchImg} alt="search"></img>
+				<img src={searchImg} alt="search" onClick={e => alert(`It's a prank))))0))`)}></img>
 			</div>
-			<label id="home"><Link to="/">Home</Link></label>
-			{
-				Cookie.get('token') ? 
-				<label id="profile"><Link to="/profile">Profile</Link></label> :
-				<label id="login"><Link to="/login">Login</Link></label>
-			}
-			<label id="register"><Link to="/register">Register</Link></label>
-			{/* <div id="create-post">
-				<label>lol</label>
-			</div> */}
+			<div className="link-div">
+				<label id="home"><Link to="/">Home</Link></label>
+				{
+					Cookie.get('token') ? 
+					<label id="profile"><Link to="/profile">Profile</Link></label> :
+					<div>
+					<label id="login"><Link to="/login">Login</Link></label>
+					<label id="register"><Link to="/register">Register</Link></label>
+					</div>
+				}
+				
+			</div>
+			
 		</div>
 	)
 }

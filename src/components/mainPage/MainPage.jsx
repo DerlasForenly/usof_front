@@ -2,8 +2,9 @@ import React from 'react'
 import PostPreview from "../post/PostPreview"
 import CurrentPost from "../post/CurrentPost"
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import PostListPagination from "../post/PostListPagination"
+import CreatePost from "../post/CreatePost"
 import createImg from "../../images/create.png"
 
 export default class MainPage extends React.Component {
@@ -23,7 +24,7 @@ export default class MainPage extends React.Component {
 			method: 'get',
 			url: "http://127.0.0.1:8000/api/posts",
 			headers: {
-				Authorization: `Bearer` + Cookies.get('token')
+				Authorization: `Bearer` + Cookie.get('token')
 			}
 		})
 		.then((response) => {
@@ -38,11 +39,13 @@ export default class MainPage extends React.Component {
   }
 
 	postPreviewHandler = e => {
-		this.setState({currentPost: parseInt(e.currentTarget.id)})
+		this.setState({
+			currentPost: parseInt(e.currentTarget.id),
+			isCreating: false
+		})
 	}
 
 	onCreatePost = e => {
-		console.log('create post')
 		this.setState({
 			isCreating: true
 		})
@@ -55,9 +58,12 @@ export default class MainPage extends React.Component {
 				this.state.isLoading ? <p>LOADING....</p> : (
 					<>
 						<div className="posts-list">
-							<div className="create-post-div" onClick={this.onCreatePost}>
-								<img src={createImg} className="logo" alt="logo"></img>
-							</div>
+							{
+								!Cookie.get('token') ? <div></div> :
+								<div className="create-post-div" onClick={this.onCreatePost}>
+									<img src={createImg} className="logo" alt="logo"></img>
+								</div>
+							}
 							{
 								this.state.posts.map((post) => {
 									return (
@@ -74,7 +80,7 @@ export default class MainPage extends React.Component {
 						</div>
 						<div className="current-post">
 							{
-								this.state.isCreating ? <div></div> :
+								this.state.isCreating ? <CreatePost></CreatePost> :
 								<CurrentPost post={this.state.posts[this.state.currentPost - 1]}></CurrentPost>
 							}
 						</div>

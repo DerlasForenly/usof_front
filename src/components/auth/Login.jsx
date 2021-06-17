@@ -1,28 +1,16 @@
-import React from 'react'
+import { React, useRef } from 'react'
 import axios from 'axios'
 import Cookie from 'js-cookie'
 
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route
-} from "react-router-dom"
+// import {
+// 	BrowserRouter as Router,
+// 	Switch,
+// 	Route
+// } from "react-router-dom"
 
 export default function Login(props) {
-  let autorized = false
-
-  let data = {
-    email: "",
-    password: ""
-  }
-
-  const onChangeEmail = e => {
-    data.email = e.target.value
-  }
-
-  const onChangePassword = e => {
-    data.password = e.target.value
-  }
+  const emailRef = useRef()
+  const passwordRef = useRef() 
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -31,8 +19,8 @@ export default function Login(props) {
       method: 'post',
       url: "http://127.0.0.1:8000/api/auth/login",
       data: {
-        email: data.email,
-        password: data.password
+        email: emailRef.current.value,
+        password: passwordRef.current.value
       }
     })
     .then((response) => {
@@ -40,8 +28,6 @@ export default function Login(props) {
         Cookie.set('token', response.data.access_token, {
           expires: 7
         })
-        autorized = true
-        console.log(autorized)
     })
     .catch(function (error) {
         console.log(error)
@@ -50,15 +36,15 @@ export default function Login(props) {
 
   return (
     <form onSubmit={handleSubmit} className="login-form">
-      <input 
+      <input
+        ref={emailRef}
         type="email" 
         placeholder="e-mail" 
-        onChange={onChangeEmail} 
       ></input>
       <input 
+        ref={passwordRef}
         type="password" 
         placeholder="password" 
-        onChange={onChangePassword}
       ></input>
       <button type="submit">Login</button>
     </form>

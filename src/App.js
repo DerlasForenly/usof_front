@@ -1,4 +1,4 @@
-import React from 'react'
+import { React } from 'react'
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import MainPage from "./components/mainPage/MainPage"
@@ -13,28 +13,15 @@ import {
 	Route
 } from "react-router-dom"
 
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-// axios.interceptors.request.use(
-// 	config => {
-// 	  const token = Cookie.get('token')
-  
-// 	  config.headers.authorization = `Bearer ${token}`
-  
-// 	  return config
-// 	},
-// 	error => {
-// 	  return Promise.reject(error)
-// 	}
-// )
-
 export default function App() {
 	return (
 	  <Router>
 		<div>
 			<Header/>
 		  <Switch>
+		  		<Route path="/profile">
+					<Profile></Profile>
+				</Route>
 				<Route path="/register">
 					<Register></Register>
 				</Route>
@@ -43,9 +30,6 @@ export default function App() {
 				</Route>
 				<Route path="/">
 					<MainPage></MainPage>
-				</Route>
-				<Route path="/profile">
-					<Profile></Profile>
 				</Route>
 		  </Switch>
 
