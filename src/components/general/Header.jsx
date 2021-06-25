@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import logoImg from "../../images/a.png"
 import searchImg from "../../images/search.png"
 import Cookie from 'js-cookie'
+//import { useEffect, useState } from "react"
 
 export default function Header(props) {
 	return (
@@ -19,12 +20,11 @@ export default function Header(props) {
 				{
 					Cookie.get('token') ? 
 					<label id="profile"><Link to="/profile">Profile</Link></label> :
-					<div>
-					<label id="login"><Link to="/login">Login</Link></label>
-					<label id="register"><Link to="/register">Register</Link></label>
+					<div className="login-register">
+						<label id="login"><Link to="/login">Login</Link></label>
+						<label id="register"><Link to="/register">Register</Link></label>
 					</div>
 				}
-				
 			</div>
 			
 		</div>

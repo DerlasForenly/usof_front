@@ -27,9 +27,9 @@ export default function CreatePost(props) {
 		})
 		.then((response) => {
 
-			let arr = Array()
-          response.data.forEach(element => {
-          arr.push({value: element.id, label: element.title})
+			let arr = []
+      response.data.forEach(element => {
+        arr.push({value: element.id, label: element.title})
       });
 
 			setState({
@@ -57,7 +57,7 @@ export default function CreatePost(props) {
 			return
 		}
 
-		if (data.currentCategories.length == 0) {
+		if (data.currentCategories.length === 0) {
 			data.currentCategories = [1]
 		}
 
@@ -78,7 +78,11 @@ export default function CreatePost(props) {
 			setState({
 				isInvalidData: false,
 				errorMessage: ""
-			})			
+			})
+			props.mainPageSetState(previousState => ({
+				...previousState,
+				reload: true
+			}))	
 		})
 		.catch((error) => {
 			console.log(error)
@@ -91,7 +95,7 @@ export default function CreatePost(props) {
 
 	const handleSelect = (newValue, actionMeta) => {
 		if (actionMeta.action === 'select-option' || actionMeta.action === 'pop-value') {
-			let arr = Array()
+			let arr = []
 			newValue.forEach(elem => {
 					arr.push(elem.value)
 			})

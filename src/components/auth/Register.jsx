@@ -1,47 +1,24 @@
 import axios from 'axios'
+import { createRef } from 'react'
 
 export default function Register(props) {
-  let data = {
-    email: "",
-    password: "",
-    name: "",
-    confirmPassword: "",
-    login: ""
-  }
-
-  const onChangeEmail = e => {
-    data.email = e.target.value
-  }
-
-  // const onChangeConfirmPassword = e => {
-  //   data.confirmPassword = e.target.value
-  // }
-
-  const onChangeLogin = e => {
-    data.login = e.target.value
-  }
-
-  const onChangeName = e => {
-    data.name = e.target.value
-  }
-
-  const onChangePassword = e => {    
-    data.password = e.target.value
-  }
+  const passwordRef = createRef()
+  const loginRef = createRef()
+  //const confirmPasswordRef = createRef()
+  const nameRef = createRef()
+  const emailRef = createRef()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    console.log(data)
 
     axios({
       method: 'post',
       url: "http://127.0.0.1:8000/api/auth/registration",
       data: {
-        email: data.email,
-        password: data.password,
-        login: data.login,
-        name: data.name
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        login: loginRef.current.value,
+        name: nameRef.current.value
       }
     })
     .then(function (response) {
@@ -57,27 +34,27 @@ export default function Register(props) {
       <input 
         type="text" 
         placeholder="login" 
-        onChange={onChangeLogin}
+        ref={loginRef}
       ></input>
-      <input 
+      <input
         type="name" 
         placeholder="name" 
-        onChange={onChangeName}
+        ref={nameRef}
       ></input>
       <input 
         type="email" 
-        placeholder="e-mail" 
-        onChange={onChangeEmail} 
+        placeholder="e-mail"
+        ref={emailRef}
       ></input>
       <input 
         type="password" 
-        placeholder="password" 
-        onChange={onChangePassword}
+        placeholder="password"
+        ref={passwordRef}
       ></input>
       {/* <input 
         type="password" 
         placeholder="confirm password" 
-        onChange={onChangeConfirmPassword}
+        ref={confirmPasswordRef}
       ></input> */}
       <button type="submit">Register</button>
     </form>

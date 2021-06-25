@@ -1,16 +1,13 @@
 import { React, useRef } from 'react'
 import axios from 'axios'
 import Cookie from 'js-cookie'
-
-// import {
-// 	BrowserRouter as Router,
-// 	Switch,
-// 	Route
-// } from "react-router-dom"
+import { useHistory } from 'react-router'
 
 export default function Login(props) {
   const emailRef = useRef()
   const passwordRef = useRef() 
+
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -24,27 +21,35 @@ export default function Login(props) {
       }
     })
     .then((response) => {
-        console.log(response.data)
-        Cookie.set('token', response.data.access_token, {
-          expires: 7
-        })
+      console.log(response.data)
+      Cookie.set('token', response.data.access_token, {
+        expires: 7
+      })
+      props.appSetState(previousState => ({
+        ...previousState,
+        reload: true,
+      }))
+      history.push('/')
     })
     .catch(function (error) {
-        console.log(error)
+      console.log(error)
     })
   }
+
 
   return (
     <form onSubmit={handleSubmit} className="login-form">
       <input
         ref={emailRef}
         type="email" 
-        placeholder="e-mail" 
+        placeholder="e-mail"
+        defaultValue="tany.tany283@gmail.com"
       ></input>
       <input 
         ref={passwordRef}
         type="password" 
-        placeholder="password" 
+        placeholder="password"
+        defaultValue="minecraft" 
       ></input>
       <button type="submit">Login</button>
     </form>

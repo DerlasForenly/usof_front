@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import PostPreview from "../post/PostPreview"
 import CurrentPost from "../post/CurrentPost"
 import axios from 'axios';
@@ -6,21 +6,24 @@ import Cookie from 'js-cookie';
 import PostListPagination from "../post/PostListPagination"
 import CreatePost from "../post/CreatePost"
 import createImg from "../../images/create.png"
+import WelcomePage from "./WelcomPage"
+import PopularCategories from '../post/PopularCategories';
 
-export default class MainPage extends React.Component {
-  constructor(props) {
-    super(props)
-		this.state = {
-			posts: [],
-			isLoading: true,
-			somePostActive: false,
-			currentPost: 1,
-			isCreating: false
-		}
-  }
 
-  componentDidMount() {
-    axios({
+export default function MainPage(props) {
+	const [state, setState] = useState({
+		posts: [],
+		isLoading: true,
+		somePostActive: false,
+		currentPost: false,
+		isCreating: false,
+		reload: false
+	})
+
+	const mainPageRef = createRef()
+
+	useEffect(() => {
+		axios({
 			method: 'get',
 			url: "http://127.0.0.1:8000/api/posts",
 			headers: {
@@ -28,67 +31,66 @@ export default class MainPage extends React.Component {
 			}
 		})
 		.then((response) => {
-			this.setState({
+
+			setState(previousState => ({
+				...previousState,
 				posts: response.data, 
 				isLoading: false,
-			})
+				currentPost: false,
+				isCreating: false,
+			}))
+
 		})
-		.catch(function (error) {
+		.catch((error) => {
 			console.log(error)
 		})
-  }
+	}, [state.isLoading, state.reload])
 
-	postPreviewHandler = e => {
-		this.setState({
-			currentPost: parseInt(e.currentTarget.id),
-			isCreating: false
-		})
-	}
-
-	onCreatePost = e => {
-		this.setState({
+	const onCreatePost = e => {
+		setState(previousState => ({
+			...previousState,
 			isCreating: true
-		})
+		}))
 	}
 
 
-  render() {
-    return (
-			<div className="main-page">{
-				this.state.isLoading ? <p>LOADING....</p> : (
-					<>
-						<div className="posts-list">
-							{
-								!Cookie.get('token') ? <div></div> :
-								<div className="create-post-div" onClick={this.onCreatePost}>
-									<img src={createImg} className="logo" alt="logo"></img>
-								</div>
-							}
-							{
-								this.state.posts.map((post) => {
-									return (
-										<div onClick={this.postPreviewHandler} key={post.id} id={post.id}>
-											<PostPreview 
-												post={post} 
-												key={post.id}>
-											</PostPreview>
-										</div>
-									)
-								})
-							}
-							<PostListPagination></PostListPagination>
-						</div>
-						<div className="current-post">
-							{
-								this.state.isCreating ? <CreatePost></CreatePost> :
-								<CurrentPost post={this.state.posts[this.state.currentPost - 1]}></CurrentPost>
-							}
-						</div>
-					</>
-				)
-			}</div>
-		)
-  }
-
-
+	return (
+		<div className="main-page" ref={mainPageRef}>{
+			state.isLoading ? <p>LOADING....</p> : (
+				<>
+					<div className="posts-list">
+						{
+							!Cookie.get('token') ? <div></div> :
+							<div className="create-post-div" onClick={onCreatePost}>
+								<img src={createImg} className="logo" alt="logo"></img>
+							</div>
+						}
+						{
+							state.posts.map((post) => {
+								return (
+									<div key={post.id} id={post.id}>
+										<PostPreview 
+											setState={setState}
+											post={post} 
+											key={post.id}
+											mainPageState={state}>
+										</PostPreview>
+									</div>
+								)
+							})
+						}
+						<PostListPagination></PostListPagination>
+					</div>
+					<div className="current-post">
+						{
+							state.isCreating ? <CreatePost mainPageSetState={setState}></CreatePost> :
+							state.currentPost ? <CurrentPost post={state.currentPost} mainPageSetState={setState}></CurrentPost> :
+							<WelcomePage></WelcomePage>
+						}
+					</div>
+					<PopularCategories></PopularCategories>
+				</>
+			)
+		}</div>
+	)
 }

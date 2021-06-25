@@ -2,6 +2,8 @@
 
 body {
 	min-width: 400px;
+	//background: #ffedd8;
+	//height: 100%;
 }
 
 
@@ -9,33 +11,39 @@ body {
 	margin-top: 30px;
 	margin-left: auto;
 	margin-right: auto;
-	width: 400px;
+	width: fit-content;
 	display: flex;
 	flex-direction: column;
-	font-size: 30px;
-	border-radius: 15px;
-	background: #f3fdff;
-	box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+	border-left: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+	
+	//border-radius: 15px;
+	//background: #ffffff;
+	//box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
 	padding: 30px;
 
 	input, button {
+		color: rgb(55, 55, 55);
+		font-size: 20px;
 		margin: 10px;
 		padding: 15px;
 		border: none;
 		outline: none;
 		background: none;
-		border-bottom: 1px solid gray;
+		border-bottom: 1px solid lightgray;
 	}
 
 	button {
+		// width: 100%;
+		// margin: 0;
 		border: none;
-		border-radius: 15px;
+		//border-radius: 15px;
 	}
 
 	button:hover {
-		background: #e3f9fe;
+		background: #f0f0f0;
 		border: none;
-		box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+		//box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
 	}
 }
 
@@ -45,13 +53,26 @@ Link {
 
 @media screen and (min-width: 790px) {
 	.navigation-header {
+		position: relative;
+		z-index: 3;
 		display: flex;
 		flex-direction: row;
-		background: #f3fdff;
+		//background: #e7ffff;
+		background: #465e9e;
 		box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
 		width: 100%;
 		height: 50px;
 		align-items: center;
+
+		.link-div {
+			display: flex;
+			flex-direction: row;
+			
+			.login-register {
+				display: flex;
+				flex-direction: row;
+			}
+		}
 	
 		#login, #register, #home, #profile {
 			margin: 5px;
@@ -60,7 +81,7 @@ Link {
 		}
 	
 		a {
-			color: darkblue;
+			color: rgb(255, 255, 255);
 			text-decoration: none;
 		}
 	
@@ -88,8 +109,10 @@ Link {
 			}
 	
 			input {
+				outline: none;
+				background: #ffffff;
 				padding: 5px 20px 5px 20px;
-				height: 30px;
+				//height: 20px;
 				width: 100%;
 				margin-right: auto;
 				border: none;
@@ -103,6 +126,7 @@ Link {
 			align-items: center;
 			width: 150px;
 			font-size: 25px;
+			color: white;
 	
 			img {
 				height: 35px;
@@ -113,27 +137,195 @@ Link {
 		}
 	}
 
+	.profile-div {
+		width: auto;
+		max-width: 1100;
+		min-width: 760px;
+		display: flex;
+		background: #e7e7eb;
+		box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+		margin: 15px 15px;
+		border-radius: 15px;
+
+		.avatar-div {
+			margin: 15px;
+			display: flex;
+			flex-direction: column;
+
+			.avatar {
+				border-radius: 15px;
+				height: 300px;
+				width: 300px;
+				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+			}
+
+			.upload-avatar {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				margin-top: 10px;
+				//text-align: center;
+
+				button {
+					//margin: auto;
+					background: #f3fdff;
+					border: none;
+					border-radius: 15px;
+				}
+
+				input {
+					//margin: auto;
+				}
+			}
+
+			
+		}
+
+		.info {
+			margin: 15px;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+
+			.other-info {
+				margin-top: 15px;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.login-div {
+				
+				font-size: 40px;
+				color: darkblue;
+				border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+				align-items: center;
+				display: flex;
+				flex-direction: row;
+
+				.login {
+					//padding: 5px 15px;
+					width: 100%;
+
+					label {
+						padding: 5px 15px;
+						
+					}
+
+					input {
+						width: auto;
+						font-size: 40px;
+						color: darkblue;
+						border: none;
+						background: white;
+						outline: none;
+						font-family: 'Roboto';
+						border-radius: 15px;
+						padding-left: 15px;
+					}
+				}
+
+				
+
+				.control {
+					height: 20px;
+					width: 20px;
+					margin-right: 10px;
+					filter: contrast(10%);
+				}
+	
+				.control:hover {
+					filter: contrast(200%);
+				}
+			}
+
+			.full-name {
+				margin: 5px;
+			}
+		}
+
+		.control {
+			left: 100%;
+			display: flex;
+			flex-direction: column;
+			margin: 15px;
+
+			
+		}
+	}
+
 	.main-page {
+		
+		position: relative;
+		z-index: 2;
 		font-family: 'Roboto';
 		min-width: 400px;
 		display: flex;
 		flex-direction: row;
-		margin: 15px;
+		//margin: 15px;
+		height: 100%;
 
 		.posts-list, .current-post {
-			margin: 15px auto;
-			background: #f3fdff;
-			box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
-			border-radius: 15px;
+			height: 100%;
+			//margin: 15px auto;
+			
+			//box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+			//border-radius: 15px;
 			padding: 5px;
 		}
 
+		.popular-categories {
+			width: 400px;
+			padding: 15px 5px;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			border-left: 1px solid lightgray;
+			//border-bottom: 1px solid lightgray;
+
+			label {
+				color: #36487b;
+				font-size: 20px;
+				text-align: center;
+			}
+
+			.categories {
+				display: flex;
+				flex-direction: column;
+				
+
+				.category-div {
+					font-weight: 600;
+					color: cornsilk;
+					font-size: 15px;
+					margin: 10px auto;
+					padding: 5px 15px 5px 15px;
+					background: #465e9e;
+					width: fit-content;
+					border-radius: 15px;
+					transition: box-shadow 0.1s ease;
+				}
+	
+				.category-div:hover {
+					box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+				}
+			}
+
+			
+		}
+
 		.posts-list {
-			height: fit-content;
-			max-width: 350px;
-			min-width: 350px;
 			position: relative;
-			margin-right: 5px;
+			z-index: 3;
+			//background: e7ffff;
+			height: fit-content;
+			max-width: 400px;
+			min-width: 400px;
+			position: relative;
+			//margin-right: 5px;
+			//border-right: 1px solid rgba(128, 128, 128, 0.5);
+			//border-bottom: 1px solid lightgray;
+			border-right: 1px solid lightgray;
+			padding: 0;
 
 			.create-post-div {
 				align-items: center;
@@ -182,15 +374,18 @@ Link {
 			.post-in-list {
 				background: none;
 				width: auto;
-				margin: 5px;
+				margin: 0px 0px;
 				display: flex;
 				flex-direction: column;
-				padding: 5px;
+				padding: 15px 10px;
+				//border-bottom: 1px solid rgba(204, 204, 204, 0);
+				transition: background 0.1s ease;
 			
 				.post-name {
-					color: darkblue;
-					margin: 5px;
-					border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+					font-size: 20px;
+					color: #36487b;
+					margin: 0px 5px;
+					font-weight: lighter;
 				}
 
 				.categories {
@@ -199,12 +394,13 @@ Link {
 					.category-div {
 						font-weight: 600;
 						color: cornsilk;
-						font-size: 11px;
+						font-size: 15px;
 						margin-right: 10px;
 						padding: 3px 12px 3px 12px;
-						background: #0b2063;
+						background: #465e9e;
 						width: auto;
 						border-radius: 15px;
+						transition: box-shadow 0.1s ease;
 					}
 
 					.category-div:hover {
@@ -217,10 +413,11 @@ Link {
 					flex-direction: row;
 					align-items: center;
 					position: relative;
+					color: rgb(99, 99, 99);
 					
 					label {
 						margin-left: 5px;
-						font-size: 11px;
+						font-size: 15px;
 					}
 
 					.author {
@@ -237,18 +434,22 @@ Link {
 			}
 
 			.post-in-list:hover {
-				background: rgb(233, 244, 255);
-				border-radius: 15px;
-				box-shadow: 0 2px 2px rgba(69, 69, 69, 0.5);
+				background: rgb(240, 240, 240);
 			}
 		}
 
 		.current-post {
-			padding: 10px;
-			height: fit-content;
-			width: 650px;
+			padding: 30px;
+			//height: fit-content;
+			height: 100%;
+			width: 100%;
 			min-width: 350px;
-			margin-left: 5px;
+			//margin-left: 5px;
+			border-left: 1px solid lightgray;
+			border-right: 1px solid lightgray;
+			//border-bottom: 1px solid lightgray;
+			margin-left: -1px;
+			margin-right: -1px;
 
 			.create-post-div {
 				flex-direction: column;
@@ -433,67 +634,103 @@ Link {
 				display: flex;
 				flex-direction: column;
 
-				.categories {
-					margin: 5px;
-					margin-left: 15px;
+				
 
-					.category-div {
-						font-weight: 600;
-						color: cornsilk;
-						font-size: 14px;
-						margin-right: 10px;
-						padding: 5px 15px 5px 15px;
-						background: #0b2063;
-						width: auto;
-						border-radius: 15px;
-					}
-
-					.category-div:hover {
-						box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
-					}
-				}
-
-				.post-name-edit {
-					padding: 5px;
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					border-bottom: 1px solid rgba(80, 80, 80, 0.3);
-
-					.post-name {
-						width: 100%;
-						margin-left: 5px;
-						margin-right: 5px;
-						font-size: 30px;
-						color: darkblue;
-					}
-
-					.post-controller {
+				.post-header {
+					.post-info {
+						margin: 5px;
+						margin-left: 15px;
+						font-size: 15px;
 						display: flex;
 						flex-direction: row;
-
-						.edit, .delete {
-							filter: contrast(5%);
-							margin: 10px;
-							height: 13px;
-							width: 13px;
+						align-items: center;
+	
+						.avatar-login-div {
+							width: fit-content;
+							display: flex;
+							flex-direction: column;
+	
+							img {
+								margin: auto;
+								height: 70px;
+								width: 70px;
+							}
+	
+							label {
+								font-weight: bold;
+							}
 						}
+	
+						label {
+							margin-right: 5px;
+						}
+					}
 
-						.edit:hover, .delete:hover {
-							filter: contrast(200%);
+					.categories {
+						margin: 5px;
+						margin-left: 15px;
+	
+						.category-div {
+							font-weight: 600;
+							color: cornsilk;
+							font-size: 14px;
+							margin-right: 10px;
+							padding: 5px 15px 5px 15px;
+							background: #465e9e;
+							width: auto;
+							border-radius: 15px;
+							transition: box-shadow 0.1s ease;
+						}
+	
+						.category-div:hover {
+							box-shadow: 0 3px 5px rgba(69, 69, 69, 0.5);
+						}
+					}
+
+					.post-name-edit {
+						padding: 5px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						border-bottom: 1px solid rgba(80, 80, 80, 0.3);
+	
+						.post-name {
+							width: 100%;
+							margin-left: 5px;
+							margin-right: 5px;
+							font-size: 35px;
+							color: #465e9e;
+						}
+	
+						.post-controller {
+							display: flex;
+							flex-direction: row;
+	
+							.edit, .delete {
+								filter: contrast(5%);
+								margin: 10px;
+								height: 13px;
+								width: 13px;
+							}
+	
+							.edit:hover, .delete:hover {
+								filter: contrast(200%);
+							}
 						}
 					}
 				}
 
-				.post-info {
-					margin: 5px;
-					margin-left: 15px;
-					font-size: 14px;
+				.images-div {
+					padding: 40px;
+					padding-left: 15px;
 
-					label {
-						margin-right: 5px;
+					img {
+						width: 100%;
+						height: fit-content;
+						border-radius: 10px;
 					}
 				}
+
 
 				.post-content {
 					margin-left: 15px;
@@ -519,13 +756,14 @@ Link {
 				}
 
 				.comments-field {
-					margin-left: 5px;
-					margin-right: 5px;
+					margin-left: 10px;
+					margin-right: 10px;
 					display: flex;
 					flex-direction: column;
+					border-top: 1px solid lightgray;
 
 					.comment {
-						background: rgba(208, 225, 255, 0.44);
+						//background: rgba(208, 225, 255, 0.44);
 						margin-bottom: 5px;
 						display: flex;
 						flex-direction: column;
@@ -660,10 +898,18 @@ Link {
 
 		.link-div {
 			margin: 5px;
+			display: flex;
+			flex-direction: row;
+
 			#login, #register, #home, #profile {
 				margin: 5px;
 				font-size: 20px;
 				color: black;
+			}
+
+			.login-register {
+				display: flex;
+				flex-direction: row;
 			}
 		}
 	

@@ -1,4 +1,6 @@
-import { React } from 'react'
+import { React, useState, useEffect } from 'react'
+//import Cookie, { set } from 'js-cookie'
+
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import MainPage from "./components/mainPage/MainPage"
@@ -14,26 +16,36 @@ import {
 } from "react-router-dom"
 
 export default function App() {
+	const [state, setState] = useState({
+		reload: false,
+	})
+
+	useEffect(() => {
+		setState({
+			reload: false
+		})
+	}, [state.reload])
+
 	return (
-	  <Router>
+		<Router>
 		<div>
-			<Header/>
-		  <Switch>
-		  		<Route path="/profile">
-					<Profile></Profile>
+			<Header appSetState={setState} appState={state}/>
+			<Switch>
+					<Route path="/profile">
+					<Profile appSetState={setState} appState={state}></Profile>
 				</Route>
 				<Route path="/register">
-					<Register></Register>
+					<Register appSetState={setState} appState={state}></Register>
 				</Route>
 				<Route path="/login">
-					<Login></Login>
+					<Login appSetState={setState} appState={state}></Login>
 				</Route>
 				<Route path="/">
 					<MainPage></MainPage>
 				</Route>
-		  </Switch>
+			</Switch>
 
 		</div>
-	  </Router>
+		</Router>
 	)
 }

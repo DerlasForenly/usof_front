@@ -6,6 +6,7 @@ import Comment from "./Comment"
 export default function CommentsField(props) {
 	const [ comments, setComments ] = useState([])
 	const [ isLoading, setIsLoading ] = useState(true)
+	//const [ me, setMe ] = useState(false)
 
 	useEffect(() => {
 		axios({
