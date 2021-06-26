@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { createRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Category from './Category';
 
 export default function PopularCategories(props) {

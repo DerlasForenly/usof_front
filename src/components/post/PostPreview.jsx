@@ -4,6 +4,10 @@ import Categories from "./Categories"
 
 export default function PostPreview(props) {
 	const postPreviewHandler = e => {
+		if (props.mainPageState.currentPost.id === props.post.id) {
+			return
+		}
+
 		props.setState(previousState => ({
 			...previousState,
 			currentPost: props.post,

@@ -49,7 +49,8 @@ export default function MainPage(props) {
 	const onCreatePost = e => {
 		setState(previousState => ({
 			...previousState,
-			isCreating: true
+			isCreating: true,
+			currentPost: false,
 		}))
 	}
 
@@ -62,6 +63,7 @@ export default function MainPage(props) {
 						{
 							!Cookie.get('token') ? <div></div> :
 							<div className="create-post-div" onClick={onCreatePost}>
+								<label>Create post: </label>
 								<img src={createImg} className="logo" alt="logo"></img>
 							</div>
 						}

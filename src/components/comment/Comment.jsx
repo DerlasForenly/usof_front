@@ -1,10 +1,12 @@
-import React, { createRef, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import CommentLikesController from './CommentLikesController'
 import axios from 'axios'
 import Cookie from 'js-cookie'
 import editImg from "../../images/edit.png"
 import deleteImg from "../../images/delete.png"
 import acceptImg from "../../images/accept.png"
+
+import avatarImg from "../../images/defaultAvatar.jpg"
 
 
 export default function Comment(props) {
@@ -14,7 +16,40 @@ export default function Comment(props) {
 		content: props.comment.content,
 		isLoading: true,
 		isEditing: false,
+		avatarIsLoading: true,
+		avatarFile: false
 	})
+
+	useEffect(() => {
+		axios({
+			method: 'get',
+			url: 'http://127.0.0.1:8000/api/users/' + props.comment.user_id + '/avatar',
+			responseType: 'blob', // important
+		})
+		.then((response) => {
+			console.log(response.data)
+
+			if (response.data.type === "application/json") {
+				setState(previousState => ({
+					...previousState,
+					isLoadingAvatar: false,
+				}))
+			}
+			else {
+				setState(previousState => ({
+					...previousState,
+					isLoadingAvatar: false,
+					avatarFile: response.data,
+				}))
+			}
+
+		})
+		.catch((error) => {
+			console.log(error)
+		})
+	}, [props.comment.user_id])
+
+
 
 	const onSend = e => {
 		if (state.isEditing) {
@@ -87,48 +122,54 @@ export default function Comment(props) {
 
 	return (
 		<div className="comment">
-			<div className="author-info">
-				<label className="author">{props.comment.login}</label>
-				{/* <label className="direction">null</label> */}
-				<label className="date">{props.comment.created_at + ""}</label>
-				{
-					//props.me ?
-					<div className="edit-delete-div">
+			<img className="avatar" src={
+				state.avatarFile ? 
+				URL.createObjectURL(state.avatarFile) : avatarImg
+				} alt="avatar"></img>
+			<div className="other">
+				<div className="author-info">
+					<label className="author">{props.comment.login}</label>
+					{/* <label className="direction">null</label> */}
+					<label className="date">{props.comment.created_at + ""}</label>
 					{
-						//props.me.id === props.comment.user_id ?
-							state.isEditing ?
-							<img 
-								src={acceptImg} 
-								className="edit" 
-								alt="edit" 
-								onClick={onSend}
-							></img> :
+						Cookie.get('token') ?
+						<div className="edit-delete-div">
+						{
+							//props.me.id === props.comment.user_id ?
+								state.isEditing ?
 								<img 
-								src={editImg} 
-								className="edit" 
-								alt="edit" 
-								onClick={onEdit}
-							></img> //: <div></div>
+									src={acceptImg} 
+									className="edit" 
+									alt="edit" 
+									onClick={onSend}
+								></img> :
+									<img 
+									src={editImg} 
+									className="edit" 
+									alt="edit" 
+									onClick={onEdit}
+								></img> //: <div></div>
+						}
+						<img 
+							src={deleteImg} 
+							className="delete" 
+							alt="delete"
+							onClick={onDelete}
+						></img>
+						</div>
+						: <div></div>
 					}
-					<img 
-						src={deleteImg} 
-						className="delete" 
-						alt="delete"
-						onClick={onDelete}
-					></img>
-					</div>
-					//: <div></div>
+				</div>
+				{
+					state.isEditing ? 
+						<textarea 
+							className="edit-area" 
+							defaultValue={state.content}
+							ref={editContentRef}></textarea> :
+						<label className="content">{state.content}</label>
 				}
+				<CommentLikesController comment={props.comment}></CommentLikesController>
 			</div>
-			{
-				state.isEditing ? 
-					<textarea 
-						className="edit-area" 
-						defaultValue={state.content}
-						ref={editContentRef}></textarea> :
-					<label className="content">{state.content}</label>
-			}
-			<CommentLikesController comment={props.comment}></CommentLikesController>
 		</div>
 	)
 }

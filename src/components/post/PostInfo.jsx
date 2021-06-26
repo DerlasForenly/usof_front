@@ -1,7 +1,7 @@
 import React from 'react'
 //import Categories from './Categories'
 
-import avatarImg from '../../images/defaultAvatar.jpg'
+//import avatarImg from '../../images/defaultAvatar.jpg'
 
 export default function PostInfo(props) {
 	return (

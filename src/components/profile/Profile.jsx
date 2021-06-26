@@ -7,6 +7,10 @@ import acceptImg from "../../images/accept.png"
 import logoutImg from "../../images/logout.png"
 import { Link } from "react-router-dom"
 
+import githubIco from "../../images/githubIco.png"
+import instagramIco from "../../images/instagramIco.png"
+import telegramIco from "../../images/telegramIco.png"
+
 export default function Profile(props) {
 	const [state, setState] = useState({
 		isLoading: true,
@@ -15,7 +19,7 @@ export default function Profile(props) {
 		isEditing: false,
 		selectedFile: false,
 		reload: false,
-		avatarFile: avatarImg
+		avatarFile: false
 	})
 
 	const inputAvatarRef = createRef()
@@ -46,15 +50,24 @@ export default function Profile(props) {
 				responseType: 'blob', // important
 			})
 			.then((response) => {
-				//console.log(response.data)	
-				setState(previousState => ({
-					...previousState,
-					isLoadingAvatar: false,
-					avatarFile: response.data,
-					reload: false,
-				}))
+				//console.log(response.data)
 
-				//console.log(state.avatarFile)
+				if (response.data.type === "application/json") {
+					setState(previousState => ({
+						...previousState,
+						isLoadingAvatar: false,
+						reload: false,
+					}))
+				}
+				else {
+					setState(previousState => ({
+						...previousState,
+						isLoadingAvatar: false,
+						avatarFile: response.data,
+						reload: false,
+					}))
+				}
+
 			})
 			.catch((error) => {
 				console.log(error)
@@ -64,6 +77,7 @@ export default function Profile(props) {
 		})
 		.catch((error) => {
 			console.log(error)
+			Cookie.remove('token')
 		})
 	}, [state.reload])
 
@@ -88,6 +102,9 @@ export default function Profile(props) {
 		const formData = new FormData()
 
 		console.log(inputAvatarRef.current.files[0])
+		if (!inputAvatarRef.current.files[0]) {
+			return
+		}
 
 		formData.append(
 			'picture',
@@ -117,58 +134,70 @@ export default function Profile(props) {
 
 	return (
 		state.isLoading ? <div>loading</div> :
-		<div className="profile-div">
-			<div className="avatar-div">
-				{
-					state.isLoadingAvatar ? <div></div> : <img className="avatar" src={
-						URL.createObjectURL(state.avatarFile)
-					} alt="avatar"></img>
-				}
-				{
-					//state.isEditing ? 
-					<form encType="mulyipart/form-data" method="post" className="upload-avatar" onSubmit={onSubmitUploadAvatar}>
-						<input type="file" name="avatar" ref={inputAvatarRef}></input>
-						<button>Upload</button>
-					</form> //: <div></div>
-				}
+		<div className="profile-page">
+			<div className="profile-div">
+				<div className="avatar-div">
+					{
+						state.isLoadingAvatar ? <div></div> : <img className="avatar" src={
+							state.avatarFile ? 
+							URL.createObjectURL(state.avatarFile) : avatarImg
+						} alt="avatar"></img>
+					}
+					{
+						//state.isEditing ? 
+						<form encType="mulyipart/form-data" method="post" className="upload-avatar" onSubmit={onSubmitUploadAvatar}>
+							<input type="file" name="avatar" ref={inputAvatarRef}></input>
+							<button className="upload-button">Upload</button>
+						</form> //: <div></div>
+					}
+				</div>
+				<div className="info">
+					<div className="login-div">
+						<div className="login">
+							{
+								state.isEditing ? <input type="text" defaultValue={state.profile.login} placeholder="Login"></input> :
+								<label>{state.profile.login}</label>
+							}
+						</div>
+						<img className="control" src={
+							state.isEditing ? acceptImg : editImg
+						} alt="edit" onClick={
+							state.isEditing ? onAccept : onEdit
+						}></img>
+						<Link className="control" to="/home" onClick={onLogout}>
+							<img src={logoutImg} alt="logout"></img>
+						</Link>
+					</div>
+					{
+						state.isEditing ? <input type="text" className="full-name" defaultValue={state.profile.name}></input> :
+						<label className="full-name">{state.profile.name}</label>
+					}
+					<div className="other-info">
+						<label>Status: null</label>
+						<label>Role: {state.profile.role}</label>
+						<label>Rating: {state.profile.rating}</label>
+						<div className="contacts-div">
+							<label>Contacts: </label>
+							<div className="icons">
+								<a href="https://github.com">
+									<img src={githubIco} alt="githubIco"></img>
+								</a>
+								<a href="https://www.instagram.com/">
+									<img src={instagramIco} alt="instagramIco"></img>
+								</a>
+								<a href="https://telegram.web">
+									<img src={telegramIco} alt="telegramIco"></img>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			
-			<div className="info">
-				<div className="login-div">
+			<div className="popular-posts">
 
-					<div className="login">
-						{
-							state.isEditing ? <input type="text" defaultValue={state.profile.login} placeholder="Login"></input> :
-							<label>{state.profile.login}</label>
-						}
-					</div>
-
-					<img className="control" src={
-						state.isEditing ? acceptImg : editImg
-					} alt="edit" onClick={
-						state.isEditing ? onAccept : onEdit
-					}></img>
-					<Link className="control" to="/home" onClick={onLogout}>
-						<img src={logoutImg} alt="logout"></img>
-					</Link>
-					
-				</div>
-
-				{
-					state.isEditing ? <input type="text" className="full-name" defaultValue={state.profile.name}></input> :
-					<label className="full-name">{state.profile.name}</label>
-				}
-
-				<div className="other-info">
-					<label>Status: null</label>
-					<label>Role: {state.profile.role}</label>
-					<label>Rating: {state.profile.rating}</label>
-					<div>
-						<label>Contacts: </label>
-					</div>
-				</div>
 			</div>
 		</div>
+		
 	)
 	
 }
