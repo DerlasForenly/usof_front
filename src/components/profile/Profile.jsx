@@ -5,13 +5,15 @@ import avatarImg from "../../images/defaultAvatar.jpg"
 import editImg from "../../images/edit.png"
 import acceptImg from "../../images/accept.png"
 import logoutImg from "../../images/logout.png"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 import githubIco from "../../images/githubIco.png"
 import instagramIco from "../../images/instagramIco.png"
 import telegramIco from "../../images/telegramIco.png"
 
 export default function Profile(props) {
+	const history = useHistory()
+
 	const [state, setState] = useState({
 		isLoading: true,
 		isLoadingAvatar: true,
@@ -23,9 +25,16 @@ export default function Profile(props) {
 	})
 
 	const inputAvatarRef = createRef()
+	const loginInputRef = createRef()
+	const nameInputRef = createRef()
 
 	const onLogout = e => {
 		Cookie.remove('token')
+		props.appSetState(previousState => ({
+			...previousState,
+			reload: !props.appState.reload,
+		}))
+		history.push("/home")
 	}
 
 	useEffect(() => {
@@ -37,7 +46,7 @@ export default function Profile(props) {
 			}
 		})
 		.then((response) => {
-			//console.log(response.data)	
+			console.log(response.data)	
 			setState(previousState => ({
 				...previousState,
 				profile: response.data,
@@ -90,10 +99,40 @@ export default function Profile(props) {
 	}
 
 	const onAccept = e => {
-		setState(previousState => ({
-			...previousState,
-			isEditing: false
-		}))
+		if (loginInputRef.current.value === state.profile.login && nameInputRef.current.value === state.profile.name) {
+			setState(previousState => ({
+				...previousState,
+				isEditing: false,
+			}))
+
+			return
+		}
+
+
+		axios({
+			method: 'patch',
+			url: 'http://127.0.0.1:8000/api/users/' + state.profile.id,
+			data: {
+				login: loginInputRef.current.value,
+				name: nameInputRef.current.value,
+				email: state.profile.email,
+				role: state.profile.role,
+			},
+			headers: {
+				Authorization: `Bearer` + Cookie.get('token')
+			}
+		})
+		.then((response) => {
+			console.log(response.data)
+			setState(previousState => ({
+				...previousState,
+				isEditing: false,
+				profile: response.data,
+			}))
+		})
+		.catch((error) => {
+			console.log(error)
+		})
 	}
 
 	const onSubmitUploadAvatar = e => {
@@ -155,7 +194,8 @@ export default function Profile(props) {
 					<div className="login-div">
 						<div className="login">
 							{
-								state.isEditing ? <input type="text" defaultValue={state.profile.login} placeholder="Login"></input> :
+								state.isEditing ? 
+								<input type="text" defaultValue={state.profile.login} placeholder="Login" ref={loginInputRef}></input> :
 								<label>{state.profile.login}</label>
 							}
 						</div>
@@ -169,13 +209,16 @@ export default function Profile(props) {
 						</Link>
 					</div>
 					{
-						state.isEditing ? <input type="text" className="full-name" defaultValue={state.profile.name}></input> :
+						state.isEditing ? 
+						<input type="text" className="full-name" defaultValue={state.profile.name} ref={nameInputRef}></input> :
 						<label className="full-name">{state.profile.name}</label>
 					}
 					<div className="other-info">
+
 						<label>Status: null</label>
 						<label>Role: {state.profile.role}</label>
 						<label>Rating: {state.profile.rating}</label>
+
 						<div className="contacts-div">
 							<label>Contacts: </label>
 							<div className="icons">
@@ -189,7 +232,16 @@ export default function Profile(props) {
 									<img src={telegramIco} alt="telegramIco"></img>
 								</a>
 							</div>
+
+
 						</div>
+
+						<div className="hidden-info">
+							<label>Hidden information:</label>
+							<label>E-mail: {state.profile.email}</label>
+							<label>Joined: {state.profile.created_at}</label>
+						</div>
+						
 					</div>
 				</div>
 			</div>

@@ -7,6 +7,9 @@ import deleteImg from "../../images/delete.png"
 import acceptImg from "../../images/accept.png"
 
 import avatarImg from "../../images/defaultAvatar.jpg"
+import TextareaAutosize from 'react-textarea-autosize'
+
+import RatingController from "../post/RatingController"
 
 
 export default function Comment(props) {
@@ -27,7 +30,7 @@ export default function Comment(props) {
 			responseType: 'blob', // important
 		})
 		.then((response) => {
-			console.log(response.data)
+			//console.log(response.data)
 
 			if (response.data.type === "application/json") {
 				setState(previousState => ({
@@ -53,10 +56,16 @@ export default function Comment(props) {
 
 	const onSend = e => {
 		if (state.isEditing) {
-			setState({isEditing: false})
+			setState(previousState => ({
+				...previousState,
+				isEditing: false,
+			}))
 		}
 		else {
-			setState({isEditing: true})
+			setState(previousState => ({
+				...previousState,
+				isEditing: true,
+			}))
 		}
 
 		axios({
@@ -71,7 +80,10 @@ export default function Comment(props) {
 		})
 		.then((response) => {
 			console.log(response.data)
-			setState({content: response.data.content})
+			setState(previousState => ({
+				...previousState,
+				content: response.data.content
+			}))
 		})
 		.catch(function (error) {
 			console.log(error)
@@ -97,7 +109,10 @@ export default function Comment(props) {
 
 	const onEdit = e => {
 		if (state.isEditing) {
-			setState({isEditing: false})
+			setState(previousState => ({
+				...previousState,
+				isEditing: false
+			}))
 		}
 		else {
 			axios({
@@ -112,7 +127,11 @@ export default function Comment(props) {
 			})
 			.then((response) => {
 				console.log(response.data)
-				setState({content: response.data.content, isEditing: true})
+				setState(previousState => ({
+					...previousState,
+					content: response.data.content, 
+					isEditing: true
+				}))
 			})
 			.catch((error) => {
 				console.log(error)
@@ -134,7 +153,7 @@ export default function Comment(props) {
 					{
 						Cookie.get('token') ?
 						<div className="edit-delete-div">
-						{
+						{/* {
 							//props.me.id === props.comment.user_id ?
 								state.isEditing ?
 								<img 
@@ -149,7 +168,7 @@ export default function Comment(props) {
 									alt="edit" 
 									onClick={onEdit}
 								></img> //: <div></div>
-						}
+						} */}
 						<img 
 							src={deleteImg} 
 							className="delete" 
@@ -162,13 +181,16 @@ export default function Comment(props) {
 				</div>
 				{
 					state.isEditing ? 
-						<textarea 
+						<TextareaAutosize
 							className="edit-area" 
 							defaultValue={state.content}
-							ref={editContentRef}></textarea> :
-						<label className="content">{state.content}</label>
+							ref={editContentRef}></TextareaAutosize> :
+							<div className="content-rating">
+								<div className="content">{state.content}</div>
+								<RatingController type="comment" id={props.comment.id}></RatingController>
+							</div>
+						
 				}
-				<CommentLikesController comment={props.comment}></CommentLikesController>
 			</div>
 		</div>
 	)

@@ -6,7 +6,6 @@ import Comment from "./Comment"
 export default function CommentsField(props) {
 	const [ comments, setComments ] = useState([])
 	const [ isLoading, setIsLoading ] = useState(true)
-	//const [ me, setMe ] = useState(false)
 
 	useEffect(() => {
 		axios({
@@ -23,12 +22,13 @@ export default function CommentsField(props) {
 		.catch(function (error) {
 			console.log(error)
 		})
-	}, [ props.post, props.reload ])
+	}, [ props ])
 
 	return (
 		<div className="comments-field">
 			{
 				isLoading ? <p>loading</p> : (
+					comments.length === 0 ? <label className="no-comments-here-yet">There are no comments here yet</label> :
 					comments.map((e, index) => {
 						return <Comment comment={e} key={e.id} setComments={setComments}></Comment>
 					})

@@ -5,6 +5,7 @@ import axios from 'axios'
 import TextareaAutosize from 'react-textarea-autosize';
 import attachImg from '../../images/attach.png'
 import Select from 'react-select';
+import LengthController from './LengthController'
 
 
 export default function CreatePost(props) {
@@ -18,7 +19,16 @@ export default function CreatePost(props) {
 		categories: [],
 		isInvalidData: false,
 		errorMessage: "",
+		titleLength: 0,
+		currentCategories: [],
 	})
+
+	const titleOnChange = e => {
+		setState(previousState => ({
+			...previousState,
+			titleLength: e.target.value.length
+		}))
+	}
 
 	useEffect(() => {
 		axios({
@@ -32,10 +42,11 @@ export default function CreatePost(props) {
         arr.push({value: element.id, label: element.title})
       });
 
-			setState({
+			setState(previousState => ({
+				...previousState,
 				categories: arr,
 				isLoading: false,
-			})
+			}))
 
 		})
 		.catch((error) => {
@@ -43,22 +54,28 @@ export default function CreatePost(props) {
 		})
 	}, [props])
 
-	let data = {
-		currentCategories: []
-	}
-
 	const onSubmitHandler = e => {
-		if (textAreaContentRef.current.value === "" ||
-		textAreaTitleRef.current.value === "") {
+		if (textAreaContentRef.current.value === "") {
 			setState({
 				isInvalidData: true,
-				errorMessage: "Invalid data"
+				errorMessage: "Content cannot be empty"
+			})
+			return	
+		}
+
+		if (textAreaTitleRef.current.value === "") {
+			setState({
+				isInvalidData: true,
+				errorMessage: "Title cannot be empty"
 			})
 			return
 		}
 
-		if (data.currentCategories.length === 0) {
-			data.currentCategories = [1]
+		if (state.currentCategories.length === 0) {
+			setState(previousState => ({
+				...previousState,
+				currentCategories: [1]
+			}))
 		}
 
 		axios({
@@ -67,7 +84,7 @@ export default function CreatePost(props) {
 			data: {
 				title: textAreaTitleRef.current.value,
 				content: textAreaContentRef.current.value,
-				categories: data.currentCategories,
+				categories: state.currentCategories,
 			},
 			headers: {
 				Authorization: `Bearer` + Cookie.get('token')
@@ -81,15 +98,17 @@ export default function CreatePost(props) {
 			})
 			props.mainPageSetState(previousState => ({
 				...previousState,
-				reload: true
+				reload: !props.mainPageState.reload,
+				currentPost: false,
 			}))	
 		})
 		.catch((error) => {
 			console.log(error)
-			setState({
+			setState(previousState => ({
+				...previousState,
 				isInvalidData: true,
 				errorMessage: "Unautorized"
-			})
+			}))
 		})
 	}
 
@@ -99,7 +118,10 @@ export default function CreatePost(props) {
 			newValue.forEach(elem => {
 					arr.push(elem.value)
 			})
-      data.currentCategories = arr
+			setState(previousState => ({
+				...previousState,
+				currentCategories: arr,
+			}))
 		}
 		console.groupEnd();
 	}
@@ -108,10 +130,10 @@ export default function CreatePost(props) {
 		state.isLoading ? <div></div> :
 		<div className="create-post-div">
 			<div className="title-row">
-				<TextareaAutosize ref={textAreaTitleRef} placeholder="Title" name="title"/>
+				<TextareaAutosize ref={textAreaTitleRef} placeholder="Title" name="title" onChange={titleOnChange}/>
+				<LengthController current={state.titleLength} maxLength={80}></LengthController>
 			</div>
 			<div className="categories-row">
-				{/* <TagInput></TagInput> */}
 				<Select
 					isMulti
 					name="categories"
@@ -136,3 +158,5 @@ export default function CreatePost(props) {
 	)
 	
 }
+
+

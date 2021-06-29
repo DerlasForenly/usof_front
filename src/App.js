@@ -1,6 +1,4 @@
 import { React, useState, useEffect } from 'react'
-//import Cookie, { set } from 'js-cookie'
-
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
 import MainPage from "./components/mainPage/MainPage"
@@ -49,3 +47,24 @@ export default function App() {
 		</Router>
 	)
 }
+
+
+/*
+
+Set max length of post title as 80, and content 500.
+Get 7 post for 1 list
+Get 10 popular categories
+Style start page
+-> LengthController in post creating content
+Length for login 25
+Confirmation for deleting post
+-> Edit comment repair (avatar dissappear and text formatting is bad)
+get info from token on front
+-> profile edit
+password reminder
+edit comment only for admins
+creating likes set defaults 0 
+reply in comments
+logout
+
+*/

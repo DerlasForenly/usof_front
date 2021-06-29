@@ -17,7 +17,8 @@ export default function MainPage(props) {
 		somePostActive: false,
 		currentPost: false,
 		isCreating: false,
-		reload: false
+		reload: false,
+		currentPage: 1,
 	})
 
 	const mainPageRef = createRef()
@@ -31,13 +32,15 @@ export default function MainPage(props) {
 			}
 		})
 		.then((response) => {
+			console.log(response.data)
 
 			setState(previousState => ({
 				...previousState,
-				posts: response.data, 
+				posts: response.data.data, 
 				isLoading: false,
 				currentPost: false,
 				isCreating: false,
+				currentPage: response.data.current_page
 			}))
 
 		})
@@ -81,12 +84,12 @@ export default function MainPage(props) {
 								)
 							})
 						}
-						<PostListPagination></PostListPagination>
+						<PostListPagination currentPage={state.currentPage} mainPageSetState={setState} mainPageState={state}></PostListPagination>
 					</div>
 					<div className="current-post">
 						{
-							state.isCreating ? <CreatePost mainPageSetState={setState}></CreatePost> :
-							state.currentPost ? <CurrentPost post={state.currentPost} mainPageSetState={setState}></CurrentPost> :
+							state.isCreating ? <CreatePost mainPageSetState={setState} mainPageState={state}></CreatePost> :
+							state.currentPost ? <CurrentPost post={state.currentPost} mainPageSetState={setState} mainPageState={state}></CurrentPost> :
 							<WelcomePage></WelcomePage>
 						}
 					</div>

@@ -5,13 +5,14 @@ import PostInfo from "./PostInfo"
 import { createRef, React, useEffect, useState } from 'react'
 import Cookie from 'js-cookie';
 import axios from 'axios'
-import TextareaAutosize from 'react-textarea-autosize';
 
 //import testContentImg from '../../images/defaultAvatar.jpg'
 
 import editImg from "../../images/edit.png"
 import deleteImg from "../../images/delete.png"
 import avatarImg from '../../images/defaultAvatar.jpg'
+import CreateComment from "./CreateComment";
+import RatingController from "./RatingController";
 //import sendImg from "../../images/send.png"
 
 export default function CurrentPost(props) {
@@ -38,43 +39,27 @@ export default function CurrentPost(props) {
 			}
 		})
 		.then((response) => {
-			console.log(response)
-			setState({reload: !state.reload, isDeleted: true})
+			//console.log(response)
+
+			setState(previousState => ({
+				...previousState,
+				isDeleted: true
+			}))
+			
 			props.mainPageSetState(previousState => ({
 				...previousState,
-				reload: true
+				reload: !props.mainPageState.reload,
+				currentPost: false,
 			}))
+			
 		})
 		.catch(function (error) {
 			console.log(error)
 		})
 	}
 
-	const onSubmit = e => {
-		e.preventDefault()
-  
-		axios({
-			method: 'post',
-			url: "http://127.0.0.1:8000/api/posts/" + props.post.id + "/comments",
-			data: {
-				content: commentRef.current.value
-			},
-			headers: {
-				authorization: `Bearer ` + Cookie.get('token')
-			}
-		})
-		.then((response) => {
-		console.log(response)
-			setState({reload: !state.reload})
-			commentRef.current.value = ""
-		})
-		.catch(function (error) {
-		console.log(error)
-		})
-	}
-
 	useEffect(() => {
-		commentRef.current.value = ""
+		//commentRef.current.value = ""
 
 		axios({
 			method: 'get',
@@ -88,6 +73,7 @@ export default function CurrentPost(props) {
 				setState(previousState => ({
 					...previousState,
 					isLoadingAvatar: false,
+					avatarFile: false,
 				}))
 			}
 			else {
@@ -102,9 +88,10 @@ export default function CurrentPost(props) {
 		.catch((error) => {
 			console.log(error)
 		})
-	}, [props.post.user_id])
+	}, [props.post.user_id, state.reload])
 
 	return (
+		state.isDeleted ? <div></div> :
 		<div className="post">
 			<div className="post-header">
 				<img className="avatar" src={
@@ -146,27 +133,11 @@ export default function CurrentPost(props) {
 
 			<div className="post-content">
 				<p>{props.post.content}</p>
+				<RatingController id={props.post.id} type="post"></RatingController>
 			</div>
-			<div className="likes">
-					<button>+</button>
-					<label>{props.post.likes}</label>
-					<button>-</button>
-			</div>
-			{
-				state.isDeleted ? <div></div> : <CommentsField post={props.post.id} reload={state.reload}></CommentsField>
-			}
-			{
-				Cookie.get('token') ?
-				// <div className="create-comment-field">
-				// 	<TextareaAutosize ref={commentRef} defaultValue="" maxLength="500"></TextareaAutosize>
-				// 	<img src={sendImg} alt="send"></img>
-				// </div>
-				<form onSubmit={onSubmit} className="create-comment-field">
-					<TextareaAutosize ref={commentRef} defaultValue="" maxLength="500"></TextareaAutosize>
-					<button type="submit">Send</button>
-				</form>
-				: <div></div>
-			}
+			
+			<CommentsField post={props.post.id} reload={state.reload}></CommentsField>
+			<CreateComment post={props.post} postSetState={setState} postState={state}></CreateComment>
 		</div>
 	)
 	

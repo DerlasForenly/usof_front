@@ -33,6 +33,13 @@ body {
 		border-bottom: 1px solid lightgray;
 	}
 
+	label {
+		margin: auto;
+		padding: 15px;
+		font-size: 15px;
+		color: red;
+	}
+
 	button {
 		// width: 100%;
 		// margin: 0;
@@ -205,14 +212,14 @@ Link {
 				padding: 25px;
 	
 				.other-info {
-					margin-top: 15px;
+					margin: 15px 0;
 					display: flex;
 					flex-direction: column;
 
 					.contacts-div {
 						display: flex;
 						flex-direction: column;
-						margin-top: 20px;
+						margin: 15px 0;
 
 						.icons {
 							display: flex;
@@ -230,6 +237,11 @@ Link {
 							}
 							
 						}
+					}
+
+					.hidden-info {
+						display: flex;
+						flex-direction: column;
 					}
 				}
 	
@@ -416,17 +428,32 @@ Link {
 			}
 
 			.pagination {
-				text-align: center;
-				margin: 5px;
+				//text-align: center;
+				//margin: 5px;
 				align-items: center;
+				//width: calc(100% - 20px);
+				width: fit-content;
+				margin: auto;
+				display: flex;
+				flex-direction: row;
 
-				width: calc(100% - 20px);
+				img {
+					margin: 5px;
+					height: 20px;
+					width: 20px;
+					filter: contrast(20%);
+				}
 
-				button {
-					margin-left: 5px;
-					margin-right: 5px;
-					border: none;
-					background: none;
+				img:hover {
+					filter: contrast(200%);
+				}
+
+				.prev {
+					rotate: 90deg;
+				}
+
+				.next {
+					rotate: 270deg;
 				}
 			}
 
@@ -521,19 +548,21 @@ Link {
 				}
 
 				button {
-					font-size: 15px;
-					margin: 5px;
+					color: cornsilk;
+					font-size: 18px;
+					margin: 15px auto;
 					background: #465e9e;
 					border-radius: 15px;
 					border: none;
-					padding: 10px;
+					padding: 10px 15px;
 					outline: none;
-					width: auto;
+					width: fit-content;
+					//width: auto;
 				}
 
 				button:hover {
-					background: rgb(233, 244, 255);
-					border-radius: 15px;
+					//background: rgb(233, 244, 255);
+					//border-radius: 15px;
 					box-shadow: 0 2px 2px rgba(69, 69, 69, 0.5);
 				}
 
@@ -543,7 +572,13 @@ Link {
 					font-size: 30px;
 					padding: 5px;
 					align-items: center;
-					border-bottom: 1px solid rgba(80, 80, 80, 0.3);
+					border-bottom: 1px solid lightgray;
+					//background: darkcyan;
+
+					.input-length-controller {
+						font-size: 15px;
+						color: gray
+					}
 
 					textarea {
 						padding: 0px 5px;
@@ -602,10 +637,13 @@ Link {
 		
 						.css-1rhbuit-multiValue {
 							font-weight: 600;
-							font-size: 14px;
+							color: cornsilk;
+							font-size: 17px;
 							padding: 5px 15px 5px 15px;
-							background: #0b2063;
+							background: #465e9e;
+							width: fit-content;
 							border-radius: 15px;
+							transition: box-shadow 0.1s ease;
 		
 							.select__multi-value__label {
 								color: cornsilk;
@@ -617,48 +655,17 @@ Link {
 						font-size: 15px;
 					}
 
-					.list {
-						background: white;
-						border-radius: 15px;
-						width: 100%;
-						display: flex;
-						flex-direction: row;
-						flex-flow: wrap;
-
-						.element {
-							margin: 5px;
-							list-style-type: none;
-							align-items: center;
-
-							.category-div {
-								font-weight: 600;
-								color: cornsilk;
-								font-size: 14px;
-								padding: 5px 15px 5px 15px;
-								background: #0b2063;
-								border-radius: 15px;
-							}
-						}
-
-						input {
-							width: auto;
-							margin: 5px;
-							margin-left: 10px;
-							font-size: 20px;
-							outline: none;
-							border: none;
-						}
-					}
 				}
 
 				.content-row {
 					display: flex;
 					flex-direction: column;
-					margin: 5px;
+					margin: 5px 0;
 					border-radius: 15px;
 					outline: none;
 					font-family: 'Roboto';
 					background: white;
+					border: 1px solid lightgray;
 
 					textarea {
 						resize: none;
@@ -746,8 +753,10 @@ Link {
 					}
 
 					.categories {
-						margin: 5px;
-						margin-left: 15px;
+						//margin: 5px;
+						//margin-left: 15px;
+						//height: fit-content;
+						margin: 15px 5px;
 	
 						.category-div {
 							font-weight: 600;
@@ -817,24 +826,50 @@ Link {
 					margin-left: 15px;
 					margin-right: 5px;
 					font-size: 15px;
-				}
-
-				.likes {
-					margin-left: 15px;
-					margin-bottom: 10px;
-					font-size: 15px;
+					display: flex;
+					flex-direction: row;
 					align-items: center;
 
-					button {
-						margin-right: 5px;
-						border: none;
-						background: none;
+					p {
+						width: 100%;
 					}
 
-					label {
-						margin-right: 5px;
+					.likes {
+						margin-left: 15px;
+						margin-bottom: 10px;
+						align-items: center;
+						display: flex;
+						flex-direction: column;
+	
+						img {
+							height: 20px;
+							width: 20px;
+						}
+
+						.inactive-up, .inactive-down {
+							filter: contrast(20%);
+						}
+
+						.inactive-up:hover, .inactive-down:hover {
+							filter: contrast(200%);
+						}
+	
+						.rating-up, .inactive-up {
+							rotate: 180deg;
+						}
+	
+						label {
+							font-weight: bold;
+							color: gray;
+							font-size: 15px;
+							margin: 0px 5px;
+						}
 					}
+
+		
 				}
+
+				
 
 				.comments-field {
 					margin-left: 10px;
@@ -842,15 +877,23 @@ Link {
 					display: flex;
 					flex-direction: column;
 					border-top: 1px solid lightgray;
+					
+
+					.no-comments-here-yet {
+						margin: 15px 15px;
+						color: gray;
+					}
 
 					.comment {
+						//align-items: center;
 						//background: rgba(208, 225, 255, 0.44);
-						margin-bottom: 5px;
+						//margin: 5px;
 						display: flex;
 						flex-direction: row;
 						padding: 10px;
 						border-radius: 15px;
 						height: fit-content;
+
 
 						.avatar {
 							height: 80px;
@@ -863,30 +906,15 @@ Link {
 
 							.edit-area {
 								font-family: 'Roboto';
-								border: none;
-								background: white;
+								border: 1px solid lightgray;
+								//background: white;
 								font-size: 14px;
 								margin: 5px;
 								outline: none;
 								resize: none;
-								border-radius: 5px;
+								border-radius: 15px;
 								padding: 5px;
-							}
-						
-							.likes {
-								margin: 0px;
-								font-size: 13px;
-								align-items: center;
-	
-								button {
-									margin-right: 5px;
-									border: none;
-									background: none;
-								}
-	
-								label {
-									margin-right: 5px;
-								}
+								width: 100%;
 							}
 	
 							.author-info {
@@ -933,48 +961,108 @@ Link {
 									font-size: 12px;
 								}
 							}
-	
-							.content {
-								margin: 5px;
-								font-size: 15px;
+
+							.content-rating {
+								display: flex;
+								flex-direction: row;
+								align-items: center;
+
+								.content {
+									margin: 5px;
+									font-size: 15px;
+									width: 100%;
+								}
+
+								.likes {
+									margin-left: 15px;
+									//margin-bottom: 10px;
+									align-items: center;
+									display: flex;
+									flex-direction: column;
+				
+									img {
+										height: 15px;
+										width: 15px;
+										//filter: contrast(20%);
+									}
+
+									.inactive-up, .inactive-down {
+										filter: contrast(20%);
+									}
+			
+									.inactive-up:hover, .inactive-down:hover {
+										filter: contrast(200%);
+									}
+				
+									.rating-up, .inactive-up {
+										rotate: 180deg;
+									}
+				
+									label {
+										font-weight: bold;
+										color: gray;
+										font-size: 13px;
+										margin: 0px 5px;
+									}
+								}
 							}
+
 						}
 
 					}
 				}
 
 				.create-comment-field {
-					margin: 5px 5px;
+					margin: 0 0;
 					display: flex;
 					flex-direction: row;
-					align-items: center;
+
+					
+
+					
 					height: fit-content;
 					width: 100%;
 					//background: #465e9e;
 
-					button, textarea {
-						//height: 100%;
-						outline: none;
-					}
-
-					textarea {
-						font-family: 'Roboto';
-						padding: 10px;
+					.testarea-length-controller {
 						width: 100%;
-						margin-right: 5px;
-						height: 80px;
-						border: none;
-						border-radius: 15px;
-						resize: none;
+						display: flex;
+						flex-direction: column;
 						border: 1px solid lightgray;
+						border-radius: 15px;
+						padding: 10px;
+						margin-right: 5px;
+
+						textarea {
+							font-family: 'Roboto';
+							width: 100%;
+							margin-right: 5px;
+							height: 80px;
+							border: none;
+							resize: none;
+							outline: none;
+						}
+
+						.input-length-controller {
+							text-align: right;
+							//background: lightblue;
+							width: 100%;
+							color: gray;
+							font-size: 12px;
+							position: relative;
+						}
 					}
 
 					button {
-						color: white;
 
-						padding: 5px 15px;
+						outline: none;
+						color: cornsilk;
+
+						padding: 10px 20px;
 						font-family: 'Roboto';
 						font-size: 18px;
+
+						height: fit-content;
 
 						border: none;
 						border-radius: 15px;
